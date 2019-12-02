@@ -1,1 +1,1 @@
-web: uwsgi uwsgi.ini -p $PORT
+web: uwsgi uwsgi.ini

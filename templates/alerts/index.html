@@ -7,18 +7,22 @@
 <section>
     <div class="list-group">
         {% for alert in alerts %}
-            <div class="list-group-item mb-3">
-                <h4>{{ alert.name }}</h4>
-                <p>
-                    <a href="{{alert.item.url}}">{{ alert.item_id }} (last seen price: {{ alert.item.price }} EUR)</a>
-                </p>
-                <a class="btn btn-secondary" href="{{url_for('alerts.edit_alert', alert_id=alert._id)}}">Edit</a>
-                <a class="btn btn-danger" href="{{url_for('alerts.delete_alert', alert_id=alert._id)}}">Delete</a>
-            </div>
+        <div class="list-group-item">
+            <h4 class="list-group-item-heading">{{ alert.name }}</h4>
+            <p>
+                <a href="{{ alert.item.url }}">{{ alert.item.url }}</a> (last price £{{ alert.item.price }})
+            </p>
+            <a class="btn btn-secondary" href="{{ url_for('alerts.edit_alert', alert_id=alert._id) }}">
+                Edit
+            </a>
+            <a class="btn btn-danger mt-3" href="{{ url_for('alerts.delete_alert', alert_id=alert._id) }}">
+                Permanently Delete Alert
+            </a>
+        </div>
         {% endfor %}
     </div>
-    <a class="btn btn-primary" href="{{ url_for('alerts.new_alert') }}">
-        Create New Alert
+    <a class="btn btn-primary mt-3" href="{{ url_for('alerts.create_alert') }}">
+        Create new
     </a>
 </section>
 {% endblock %}

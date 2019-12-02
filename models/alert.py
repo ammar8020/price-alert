@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
-from typing import Dict
-from uuid import uuid4
-from models.item import Item
-from models.model import Model
-from models.user import User
+from typing import List, Dict
+import uuid
 from libs.mailgun import Mailgun
+from common.database import Database
+from models.item import Item
+from models.user import User
+from models.model import Model
 
 
 @dataclass(eq=False)
@@ -14,7 +15,7 @@ class Alert(Model):
     item_id: str
     price_limit: float
     user_email: str
-    _id: str = field(default_factory=lambda: uuid4().hex)
+    _id: str = field(default_factory=lambda: uuid.uuid4().hex)
 
     def __post_init__(self):
         self.item = Item.get_by_id(self.item_id)
@@ -24,23 +25,23 @@ class Alert(Model):
         return {
             "_id": self._id,
             "name": self.name,
-            "item_id": self.item_id,
             "price_limit": self.price_limit,
-            "user_email": self.user_email
+            "item_id": self.item._id,
+            "user_email": self.user_email,
         }
 
     def load_item_price(self) -> float:
         self.item.load_price()
         return self.item.price
 
-    def notify_if_price_reached(self):
+    def notify_if_price_reached(self) -> None:
         if self.item.price < self.price_limit:
-            # print(f"{self.item} has reached a price under {self.price_limit}. It´s at {self.item.price} now")
-            Mailgun.send_mail(
-                [self.user_email],
-                f"Notification for {self.name}",
-                f"Your Alert {self.name} has reached a price under {self.price_limit}. It´s at {self.item.price} now."
-                f"Go here: {self.item.url} to check it out",
-                f"<p>Your Alert {self.name} has reached a price under {self.price_limit}.</p><p>It´s at {self.item.price} now.</p>"
-                f"<p> Click <a href='{self.item.url}'>here</a> to check it out.</p>"
+            print(
+                f"Item {self.item} has reached a price under {self.price_limit}. Latest price: {self.item.price}."
+            )
+            Mailgun.send_email(
+                email=[self.user_email],
+                subject=f"Notification for {self.name}",
+                text=f"Your alert {self.name} has reached a price under {self.price_limit}. The latest price is {self.item.price}. Go to this address to check your item: {self.item.url}.",
+                html=f'<p>Your alert {self.name} has reached a price under {self.price_limit}.</p><p>The latest price is {self.item.price}. Check your item out <a href="{self.item.url}>here</a>.</p>',
             )

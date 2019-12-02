@@ -1,18 +1,25 @@
 [[source]]
-name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
-
-[dev-packages]
+name = "pypi"
 
 [packages]
-flask = "*"
+pymongo = "*"
 beautifulsoup4 = "*"
 requests = "*"
-pymongo = "*"
 passlib = "*"
+Flask = "*"
+Jinja2 = ">=2.10.1"
+uWSGI = "*"
 python-dotenv = "*"
-uwsgi = "*"
+urllib3 = ">=1.24.2"
+
+[dev-packages]
+pylint = "*"
+black = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true

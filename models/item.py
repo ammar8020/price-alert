@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
-from typing import Dict
-import requests
+from typing import Dict, List
 from bs4 import BeautifulSoup
+import requests
 import re
-from uuid import uuid4
+import uuid
+from common.database import Database
 from models.model import Model
 
 
@@ -14,20 +15,20 @@ class Item(Model):
     tag_name: str
     query: Dict
     price: float = field(default=None)
-    _id: str = field(default_factory=lambda: uuid4().hex)
+    _id: str = field(default_factory=lambda: uuid.uuid4().hex)
 
     def load_price(self) -> float:
-        response = requests.get(self.url)
-        content = response.content
+        request = requests.get(self.url)
+        content = request.content
         soup = BeautifulSoup(content, "html.parser")
         element = soup.find(self.tag_name, self.query)
         string_price = element.text.strip()
 
-        pattern = re.compile(r"(\d+?\.?\d+,\d\d)")
+        pattern = re.compile(r"(\d+,?\d+\.\d+)")
         match = pattern.search(string_price)
         found_price = match.group(1)
-        self.price = float(found_price.replace(",", "."))
-
+        without_commas = found_price.replace(",", "")
+        self.price = float(without_commas)
         return self.price
 
     def json(self) -> Dict:
@@ -35,6 +36,6 @@ class Item(Model):
             "_id": self._id,
             "url": self.url,
             "tag_name": self.tag_name,
-            "query": self.query,
-            "price": self.price
+            "price": self.price,
+            "query": self.query
         }
