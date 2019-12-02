@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <header><h1>Update Store</h1></header>
+    <section class="update-store-form">
+        <form method="post">
+            <div class="form-group w-50">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ store.name }}" disabled />
+            </div>
+            <div class="form-group w-50">
+                <label for="url_prefix">URL Prefix</label>
+                <input type="text" class="form-control" id="url_prefix" name="url_prefix" placeholder="https://..." value="{{ store.url_prefix }}"/>
+            </div>
+            <div class="form-group w-50">
+                <label for="tag_name">HTML Tag Name</label>
+                <input type="text" class="form-control" id="tag_name" name="tag_name" placeholder='i.e. div' value="{{ store.tag_name }}"/>
+            </div>
+            <div class="form-group w-50">
+                <label for="query">HTML Query</label>
+                <input type="text" class="form-control" id="query" name="query" placeholder='i.e. {"class": "price"}' value="{{ store.query }}"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Store</button>
+        </form>
+    </section>
+{% endblock %}

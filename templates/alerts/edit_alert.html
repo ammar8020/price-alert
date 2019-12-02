@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <header><h1>Update Alert</h1></header>
+    <section class="update-alert-form">
+        <form method="post">
+            <div class="form-group w-50">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ alert.name }}" disabled />
+            </div>
+            <div class="form-group w-50">
+                <label for="item_url">Item URL</label>
+                <input type="text" class="form-control" id="item_url" name="item_url" value="{{ alert.item.url }}" disabled />
+            </div>
+            <div class="form-group w-50">
+                <label for="price_limit">Price Limit</label>
+                <input type="text" class="form-control" id="price_limit" name="price_limit" placeholder='i.e. 150.50' value="{{ alert.price_limit }}"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Alert</button>
+        </form>
+    </section>
+{% endblock %}
